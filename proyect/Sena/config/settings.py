@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-from whitenoise.storage import CompressedManifestStaticFilesStorage
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,7 +31,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # <-- agrega esta línea
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -85,16 +84,11 @@ USE_TZ = True
 # Static files
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # <-- necesario para collectstatic
-
-
-class SilentFileMissingStorage(CompressedManifestStaticFilesStorage):
-    manifest_strict = False
-
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STORAGES = {
     "staticfiles": {
-        "BACKEND": "config.settings.SilentFileMissingStorage",
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
